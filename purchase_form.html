@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmer Product Purchase Entry</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f7fb;
+      color: #1b2a40;
+      margin: 0;
+      padding: 24px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1f75cc;
+    }
+
+    .card {
+      max-width: 760px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      padding: 22px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+      width: 100%;
+      border: 1px solid #99b0c6;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 15px;
+      background: #fefefe;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    button {
+      background: #2d81e5;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #1d63b3;
+    }
+
+    .output {
+      margin-top: 16px;
+      padding: 12px;
+      background: #def0ff;
+      border: 1px solid #9ecdf2;
+      border-radius: 7px;
+      color: #18445f;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Farmer Purchase Record</h1>
+    <p>Enter your personal details, product purchase quantities, and upload invoice proof.</p>
+    <form id="farmForm">
+      <div class="grid">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" required />
+        </div>
+        <div class="field">
+          <label for="farmName">Farm / Business Name</label>
+          <input type="text" id="farmName" name="farmName" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" />
+        </div>
+        <div class="field full-width">
+          <label for="address">Address</label>
+          <textarea id="address" name="address" placeholder="Street, City, Region, Country"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="cropProtection">Crop Protection Units</label>
+          <select id="cropProtection" name="cropProtection" required>
+            <option value="">Select</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="seed">Seed Units</label>
+          <select id="seed" name="seed" required>
+            <option value="">Select</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="biological">Biological Units</label>
+          <select id="biological" name="biological" required>
+            <option value="">Select</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6+</option>
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <label for="invoiceUpload">Invoice Upload (Proof of Purchase)</label>
+          <input type="file" id="invoiceUpload" name="invoiceUpload" accept="image/*,.pdf" required />
+          <small>Accepts JPG/PNG/PDF. Max file size 10MB.</small>
+        </div>
+      </div>
+
+      <button type="submit">Submit Purchase Record</button>
+    </form>
+
+    <div id="output" class="output" style="display: none;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('farmForm');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const invoiceFile = formData.get('invoiceUpload');
+
+      if (invoiceFile && invoiceFile.size > 10 * 1024 * 1024) {
+        alert('Invoice file is too large. Maximum allowed is 10MB.');
+        return;
+      }
+
+      const result = {
+        fullName: formData.get('fullName'),
+        farmName: formData.get('farmName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        cropProtection: formData.get('cropProtection'),
+        seed: formData.get('seed'),
+        biological: formData.get('biological'),
+        invoice: invoiceFile ? invoiceFile.name : 'No file selected',
+        uploadedAt: new Date().toLocaleString(),
+      };
+
+      output.style.display = 'block';
+      output.textContent = 'Purchase submitted successfully!\n\n' + JSON.stringify(result, null, 2);
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
