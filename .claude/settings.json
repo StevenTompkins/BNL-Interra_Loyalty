@@ -1,0 +1,8 @@
+"env": {
+    "ANTHROPIC_BASE_URL": "https://portkey.syngenta.com",
+    "ANTHROPIC_AUTH_TOKEN": "7BXrX7x9dzkEq1Z83IWbd12YbOfp",
+    "ANTHROPIC_CUSTOM_HEADERS": "x-portkey-api-key: PORTKEY_KEY",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "@bedrock-aifoundry-use1-001/us.anthropic.claude-sonnet-4-6",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "@openai-aifoundry-swc-001/eu.anthropic.claude-opus-4-6-v1:0"
+  },
+  "forceLoginMethod": "console"
